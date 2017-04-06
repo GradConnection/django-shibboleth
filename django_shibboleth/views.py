@@ -66,22 +66,16 @@ def shib_register(request, RegisterForm=BaseRegisterForm,
         if form.is_valid():
             user = form.save(attr)
     try:
-        user = User.objects.get(username=attr[settings.SHIB_USERNAME])
+        user = User.objects.get(email__iexact=attr[settings.SHIB_USERNAME])
     except User.DoesNotExist:
-        form = RegisterForm()
-        context = {'form': form,
-                   'next': redirect_url,
-                   'shib_attrs': attr,
-                   'was_redirected': was_redirected}
-        return render_to_response(register_template_name,
-                                  context,
-                                  context_instance=RequestContext(request))
+        user = User.objects.create(email__iexact=attr[settings.SHIB_USERNAME])
 
     user.set_unusable_password()
     try:
         user.first_name = attr[settings.SHIB_FIRST_NAME]
         user.last_name = attr[settings.SHIB_LAST_NAME]
         user.email = attr[settings.SHIB_EMAIL]
+        user.is_university_staff = attr[settings.SHIB_IS_UNIVERSITY_STAFF]
     except:
         pass
     user.save()
