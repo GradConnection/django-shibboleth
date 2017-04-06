@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with django_shibboleth  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION = (1, 6, '', 'final', 0)
+VERSION = (1, 7, '', 'final', 0)
 
 def get_version():
     """ Return the current version"""
@@ -28,5 +28,3 @@ def get_version():
         if VERSION[3] != 'final':
             version = '%s %s %s' % (version, VERSION[3], VERSION[4])
     return version
-
-default_app_config = 'django_shibboleth.apps.ShibbolethConfig'

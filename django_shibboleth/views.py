@@ -34,7 +34,7 @@ def render_forbidden(*args, **kwargs):
 
 
 def shib_register(request, RegisterForm=BaseRegisterForm,
-                  register_template_name='shibboleth/register.html'):
+                  register_template_name='django_shibboleth/register.html'):
 
     attr, error = parse_attributes(request.META)
 
@@ -45,19 +45,19 @@ def shib_register(request, RegisterForm=BaseRegisterForm,
     context = {'shib_attrs': attr,
                'was_redirected': was_redirected}
     if error:
-        return render_forbidden('shibboleth/attribute_error.html',
+        return render_forbidden('django_shibboleth/attribute_error.html',
                                   context,
                                   context_instance=RequestContext(request))
     try:
         username = attr[settings.SHIB_USERNAME]
         # TODO this should log a misconfiguration.
     except:
-        return render_forbidden('shibboleth/attribute_error.html',
+        return render_forbidden('django_shibboleth/attribute_error.html',
                                   context,
                                   context_instance=RequestContext(request))
 
     if not attr[settings.SHIB_USERNAME] or attr[settings.SHIB_USERNAME] == '':
-        return render_forbidden('shibboleth/attribute_error.html',
+        return render_forbidden('django_shibboleth/attribute_error.html',
                                   context,
                                   context_instance=RequestContext(request))
 
@@ -90,6 +90,6 @@ def shib_meta(request):
 
     meta_data = request.META.items()
 
-    return render_to_response('shibboleth/meta.html',
+    return render_to_response('django_shibboleth/meta.html',
                               {'meta_data': meta_data},
                               context_instance=RequestContext(request))
