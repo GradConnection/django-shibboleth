@@ -39,9 +39,9 @@ def shib_register(request, RegisterForm=BaseRegisterForm,
     attr, error = parse_attributes(request.META)
 
     was_redirected = False
-    if "next" in request.REQUEST:
+    if "next" in request.GET:
         was_redirected = True
-    redirect_url = request.REQUEST.get('next', settings.LOGIN_REDIRECT_URL)
+    redirect_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
     context = {'shib_attrs': attr,
                'was_redirected': was_redirected}
     if error:
@@ -61,10 +61,6 @@ def shib_register(request, RegisterForm=BaseRegisterForm,
                                   context,
                                   context_instance=RequestContext(request))
 
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(attr)
     try:
         user = User.objects.get(email__iexact=attr[settings.SHIB_USERNAME])
     except User.DoesNotExist:
